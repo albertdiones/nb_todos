@@ -20,7 +20,7 @@ class Item
     private ?string $description = null;
 
     #[ORM\Column]
-    private ?int $index = null;
+    private ?int $sortIndex = null;
 
     public function getId(): ?int
     {
@@ -58,14 +58,14 @@ class Item
         return $this;
     }
 
-    public function getIndex(): ?int
+    public function getSortIndex(): ?int
     {
-        return $this->index;
+        return $this->sortIndex;
     }
 
-    public function setIndex(int $index): static
+    public function setSortIndex(int $sortIndex): static
     {
-        $this->index = $index;
+        $this->sortIndex = $sortIndex;
 
         return $this;
     }
