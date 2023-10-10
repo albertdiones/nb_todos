@@ -100,4 +100,21 @@ class ItemServiceTest extends \PHPUnit\Framework\TestCase
         self::assertEquals($expectedTitle, $item->getTitle());
     }
 
+
+    public function testDelete() {
+        $repository = $this->createMock(ItemRepository::class);
+
+        $repository->expects(self::once())->method('delete')->willReturn(true);
+
+        $service = new ItemService(
+            $repository
+        );
+
+        $itemToDelete = (new Item())
+            ->setId(123)
+            ->setTitle('buy potato');
+
+        $service->delete($itemToDelete);
+    }
+
 }

@@ -30,6 +30,15 @@ class ItemRepository extends ServiceEntityRepository
         return (bool) $item->getId();
     }
 
+    public function delete(Item $item, bool $flush = true): bool
+    {
+        $this->_em->remove($item);
+        if ($flush) {
+            $this->_em->flush();
+        }
+        return true;
+    }
+
 //    /**
 //     * @return Item[] Returns an array of Item objects
 //     */

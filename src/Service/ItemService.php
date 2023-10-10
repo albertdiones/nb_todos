@@ -59,4 +59,14 @@ class ItemService {
         return $item;
     }
 
+
+    public function delete(Item $item): ?Item {
+
+        if (!$this->itemRepository->delete($item)) {
+            return null;
+        }
+
+        return $item;
+    }
+
 }
