@@ -20,7 +20,7 @@ class Item
     private ?string $description = null;
 
     #[ORM\Column]
-    private ?int $sortIndex = null;
+    private ?int $sortIndex = 0;
 
     public function getId(): ?int
     {
