@@ -59,7 +59,7 @@ class ItemController extends AbstractController
     #[Route('/api/items/{itemId}', methods: ['PATCH'])]
     public function update(Request $request, int $itemId): JsonResponse
     {
-        [$item] = $this->itemService->get(['id' => $itemId]);
+        [$item] = $this->itemService->get(['id' => $itemId]) ?: [null];
         if (empty($item)) {
             throw new BadRequestException("Invalid item id");
         }
@@ -77,7 +77,7 @@ class ItemController extends AbstractController
     public function delete(Request $request, int $itemId): JsonResponse
     {
 
-        [$item] = $this->itemService->get(['id' => $itemId]);
+        [$item] = $this->itemService->get(['id' => $itemId]) ?: [null];
         if (empty($item)) {
             throw new BadRequestException("Invalid item id");
         }
