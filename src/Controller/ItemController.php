@@ -40,7 +40,7 @@ class ItemController extends AbstractController
     #[Route('/api/items', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
-        $requestItem = json_decode($request->getContent());
+        $requestItem = json_decode($request->getContent(), true);
 
         if (!$requestItem) {
             throw new BadRequestException("No request body");
