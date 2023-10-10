@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Service\ItemService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,25 +17,29 @@ class ItemController extends AbstractController
     //protected $itemRepository;
 
     public function __construct(
-        // ItemService
+        ItemService $itemService
         // ItemRepository
     ) {
-        //$this->itemService = $itemService;
+        $this->itemService = $itemService;
         //$this->itemRepository = $itemService;
     }
 
 
 
     #[Route('/api/items', methods: ['GET'])]
-    public function show(Request $request) {
-        $items = $this->itemService->get([]);
+    public function show(Request $request): JsonResponse
+    {
+        $items = $this->itemService->convertToOutboundDtos(
+            $this->itemService->get([])
+        );
 
         return new JsonResponse($items);
     }
 
 
     #[Route('/api/items', methods: ['POST'])]
-    public function create(Request $request) {
+    public function create(Request $request): JsonResponse
+    {
         $requestItem = json_decode($request->getContent());
 
         if (!$requestItem) {
@@ -52,7 +57,8 @@ class ItemController extends AbstractController
 
 
     #[Route('/api/items/{itemId}', methods: ['PATCH'])]
-    public function update(Request $request, int $itemId) {
+    public function update(Request $request, int $itemId): JsonResponse
+    {
         [$item] = $this->itemService->get(['id' => $itemId]);
         if (empty($item)) {
             throw new BadRequestException("Invalid item id");
@@ -68,7 +74,8 @@ class ItemController extends AbstractController
 
 
     #[Route('/api/items/{itemId}', methods: ['DELETE'])]
-    public function delete(Request $request, int $itemId) {
+    public function delete(Request $request, int $itemId): JsonResponse
+    {
 
         [$item] = $this->itemService->get(['id' => $itemId]);
         if (empty($item)) {
