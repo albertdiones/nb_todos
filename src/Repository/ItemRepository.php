@@ -21,6 +21,15 @@ class ItemRepository extends ServiceEntityRepository
         parent::__construct($registry, Item::class);
     }
 
+    public function save(Item $item, bool $flush = true): bool
+    {
+        $this->_em->persist($item);
+        if ($flush) {
+            $this->_em->flush();
+        }
+        return (bool) $item->getId();
+    }
+
 //    /**
 //     * @return Item[] Returns an array of Item objects
 //     */

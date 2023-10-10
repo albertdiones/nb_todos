@@ -35,4 +35,16 @@ class ItemService {
 
     }
 
+    public function create(array $requestItem): ?Item {
+        $item = new Item();
+
+        $item->setTitle($requestItem['title']);
+
+        if (!$this->itemRepository->save($item)) {
+            return null;
+        }
+
+        return $item;
+    }
+
 }
