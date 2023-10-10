@@ -64,11 +64,11 @@ class ItemController extends AbstractController
             throw new BadRequestException("Invalid item id");
         }
 
-        $requestItem = json_decode($request->getContent());
+        $requestItem = json_decode($request->getContent(), true);
 
-        $this->itemService->update($item, $requestItem);
+        $this->itemService->update($requestItem, $item);
 
-        return new JsonResponse($item, Response::HTTP_ACCEPTED);
+        return new JsonResponse($this->itemService->convertToOutboundDtos([$item])[0], Response::HTTP_ACCEPTED);
     }
 
 
