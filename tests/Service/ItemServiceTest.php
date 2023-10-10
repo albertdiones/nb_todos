@@ -34,4 +34,25 @@ class ItemServiceTest extends \PHPUnit\Framework\TestCase
 
     }
 
+
+    public function testGet() {
+        $repository = $this->createMock(ItemRepository::class);
+        $expectedId = 123;
+        $repository->expects(self::once())->method('findBy')->willReturn(
+            [
+                (new Item())
+                ->setId($expectedId)
+            ]
+        );
+        $service = new ItemService(
+            $repository
+        );
+        $items = $service->get([]);
+        self::assertIsArray($items);
+        self::assertNotEmpty($items);
+        self::assertArrayHasKey(0, $items);
+        self::assertInstanceOf(Item::class, $items[0]);
+        self::assertEquals($expectedId, $items[0]->getId());
+    }
+
 }
