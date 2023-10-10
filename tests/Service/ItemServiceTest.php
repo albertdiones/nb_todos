@@ -69,9 +69,32 @@ class ItemServiceTest extends \PHPUnit\Framework\TestCase
 
         $expectedTitle = 'buy tomatoes';
         $item = $service->create([
-            'id' => $expectedId,
             'title' => $expectedTitle
         ]);
+        self::assertNotEmpty($item);
+        self::assertInstanceOf(Item::class, $item);
+        self::assertEquals($expectedTitle, $item->getTitle());
+    }
+
+
+    public function testUpdate() {
+        $repository = $this->createMock(ItemRepository::class);
+
+        $repository->expects(self::once())->method('save')->willReturn(true);
+
+        $service = new ItemService(
+            $repository
+        );
+
+
+        $expectedTitle = 'buy bell peppers';
+        $itemToUpdate = (new Item())
+            ->setTitle($expectedTitle);
+
+        $item = $service->update([
+            'title' => $expectedTitle
+        ],$itemToUpdate);
+
         self::assertNotEmpty($item);
         self::assertInstanceOf(Item::class, $item);
         self::assertEquals($expectedTitle, $item->getTitle());

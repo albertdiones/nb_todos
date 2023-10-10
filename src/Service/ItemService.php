@@ -47,4 +47,16 @@ class ItemService {
         return $item;
     }
 
+
+    public function update(array $requestItem, Item $item): ?Item {
+
+        $item->setTitle($requestItem['title']);
+
+        if (!$this->itemRepository->save($item)) {
+            return null;
+        }
+
+        return $item;
+    }
+
 }
