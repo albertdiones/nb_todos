@@ -23,13 +23,14 @@ class ItemServiceTest extends \PHPUnit\Framework\TestCase
         $dtos = $service->convertToOutboundDtos(
             $items
         );
+        $dtosAsArray = json_decode(json_encode($dtos), true);
 
-        $debug = print_r(json_decode(json_encode($dtos)), true);
+        $debug = print_r($dtosAsArray, true);
 
-        self::assertArrayHasKey(0, $dtos, $debug);
-        self::assertNotEmpty($dtos[0], $debug);
+        self::assertArrayHasKey(0, $dtosAsArray, $debug);
+        self::assertNotEmpty($dtosAsArray[0], $debug);
 
-        self::assertEquals($expectedId, $items[0], $debug);
+        self::assertEquals($expectedId, $dtosAsArray[0]['id'], $debug);
 
     }
 
