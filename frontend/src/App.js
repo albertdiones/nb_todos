@@ -9,7 +9,7 @@ function ListItem({title}) {
     return (<li><input type={"checkbox"}/>{title}</li>);
 }
 
-function ListAddNew() {
+function ListAddNew({onCreate}) {
 
     const addNewItem = (e) => {
         const requestBody = {
@@ -26,7 +26,7 @@ function ListAddNew() {
                 body: JSON.stringify(requestBody)
             }
         ).then(
-            () => alert('added')
+            () => onCreate()
         );
 
         e.preventDefault();
@@ -48,24 +48,27 @@ function ItemList(props) {
     const [items, setItems] = useState([]);
     const [loading,setLoading] = useState(true);
 
+    let reloadList = () => {
+        fetch(itemEndpoint).then(
+            (response) => {
+                return response.json();
+            }
+        ).then(
+            (data) => {
+                setItems(data);
+            }
+        )
+    };
+
+
     useEffect(
-        () => {
-            fetch(itemEndpoint).then(
-                (response) => {
-                    return response.json();
-                }
-            ).then(
-                (data) => {
-                    setItems(data);
-                }
-            )
-        },
+        reloadList,
         []
     )
 
     return (<ol className={loading ? 'loading' : ''}>
         {items.map((item) => <ListItem key={item.id} title={item.title}/>)}
-        <ListAddNew/>
+        <ListAddNew onCreate={reloadList}/>
     </ol>);
 }
 
