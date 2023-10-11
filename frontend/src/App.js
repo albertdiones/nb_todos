@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import {Component} from "react";
+import {Component, useEffect, useState} from "react";
 
 function ListItem({title}) {
     return (<li><input type={"checkbox"}/>{title}</li>);
@@ -16,11 +16,28 @@ function ListAddNew() {
 }
 
 function ItemList(props) {
-    return (<ol>
-        <ListItem title={"Buy Potatoes"}/>
-        <ListItem title={"Buy Tomatoes"}/>
-        <ListItem title={"Buy Bleach"}/>
-        <ListItem title={"Buy Soap"}/>
+
+
+    const [items, setItems] = useState([]);
+    const [loading,setLoading] = useState(true);
+
+    useEffect(
+        () => {
+            fetch('http://localhost:8000/api/items').then(
+                (response) => {
+                    return response.json();
+                }
+            ).then(
+                (data) => {
+                    setItems(data);
+                }
+            )
+        },
+        []
+    )
+
+    return (<ol className={loading ? 'loading' : ''}>
+        {items.map((item) => <ListItem title={item.title}/>)}
         <ListAddNew/>
     </ol>);
 }
