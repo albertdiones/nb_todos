@@ -3,7 +3,7 @@ import './App.css';
 import {Component} from "react";
 
 function ListItem({title}) {
-  return (<li><input type={"checkbox"}/>{title}</li>);
+    return (<li><input type={"checkbox"}/>{title}</li>);
 }
 
 function ListAddNew() {
@@ -15,27 +15,27 @@ function ListAddNew() {
     );
 }
 
-function ItemList(props){
-  return (<ol>
-      <ListItem title={"Buy Potatoes"}/>
-      <ListItem title={"Buy Tomatoes"}/>
-      <ListItem title={"Buy Bleach"}/>
-      <ListItem title={"Buy Soap"}/>
-      <ListAddNew/>
-  </ol>);
+function ItemList(props) {
+    return (<ol>
+        <ListItem title={"Buy Potatoes"}/>
+        <ListItem title={"Buy Tomatoes"}/>
+        <ListItem title={"Buy Bleach"}/>
+        <ListItem title={"Buy Soap"}/>
+        <ListAddNew/>
+    </ol>);
 }
 
 function App() {
-  return (
-      <>
-        <header>
-          TODO List
-        </header>
-        <main>
-          <ItemList/>
-        </main>
-      </>
-  );
+    return (
+        <>
+            <header>
+                TODO List
+            </header>
+            <main>
+                <ItemList/>
+            </main>
+        </>
+    );
 }
 
 export default App;
