@@ -5,15 +5,32 @@ import {Component, useEffect, useState} from "react";
 
 const itemEndpoint = 'http://localhost:8000/api/items';
 
-function ListItem({title}) {
-    return (<li><input type={"checkbox"}/>{title}</li>);
+function ListItem({id, title, onDelete}) {
+
+    const onCheckboxChange = (e) => {
+        const checkbox = e.target;
+        fetch(
+            `${itemEndpoint}/${id}`,{
+                method: "DELETE",
+            }
+        ).then(onDelete)
+    }
+
+    return (<li>
+        <input type={"checkbox"} onChange={onCheckboxChange}/>
+        {title}
+    </li>);
 }
 
 function ListAddNew({onCreate}) {
 
+
     const addNewItem = (e) => {
+
+        const titleInput = e.target.querySelector('[name=title]');
+
         const requestBody = {
-            "title": e.target.querySelector('[name=title]').value
+            "title": titleInput.value
         };
 
         fetch(
@@ -26,7 +43,14 @@ function ListAddNew({onCreate}) {
                 body: JSON.stringify(requestBody)
             }
         ).then(
-            () => onCreate()
+            () => {
+                onCreate().then(
+                    () => {
+                        titleInput.value = '';
+                        titleInput.blur();
+                    }
+                )
+            }
         );
 
         e.preventDefault();
@@ -42,14 +66,14 @@ function ListAddNew({onCreate}) {
     );
 }
 
-function ItemList(props) {
+function ItemList({onCheck}) {
 
 
     const [items, setItems] = useState([]);
     const [loading,setLoading] = useState(true);
 
     let reloadList = () => {
-        fetch(itemEndpoint).then(
+        return fetch(itemEndpoint).then(
             (response) => {
                 return response.json();
             }
@@ -67,7 +91,7 @@ function ItemList(props) {
     )
 
     return (<ol className={loading ? 'loading' : ''}>
-        {items.map((item) => <ListItem key={item.id} title={item.title}/>)}
+        {items.map((item) => <ListItem key={item.id} id={item.id} title={item.title} onDelete={reloadList}/>)}
         <ListAddNew onCreate={reloadList}/>
     </ol>);
 }
