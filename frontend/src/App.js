@@ -5,7 +5,10 @@ import {Component, useEffect, useState} from "react";
 
 const itemEndpoint = 'http://localhost:8000/api/items';
 
-function ListItem({id, title, onDelete}) {
+function ListItem({id, title: propTitle, onDelete, onUpdate}) {
+    const [editMode, setEditMode] = useState(false);
+    const [originalTitle, setOriginalTitle] = useState(propTitle);
+    const [title, setTitle] = useState(propTitle);
 
     const onCheckboxChange = (e) => {
         const checkbox = e.target;
@@ -16,9 +19,59 @@ function ListItem({id, title, onDelete}) {
         ).then(onDelete)
     }
 
+    const activateEditMode = (e) => {
+        const titleInput = e.target;
+        setEditMode(true);
+    }
+
+    const updateItem = (e) => {
+        e.preventDefault();
+        const titleInput = e.target.querySelector('[name=title]');
+        titleInput.blur();
+    }
+
+    const updateTitle = (newTitle) => {
+
+        const requestBody = {
+            "title": newTitle
+        };
+
+        setTitle(newTitle);
+        fetch(
+            `${itemEndpoint}/${id}`,{
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(requestBody)
+            }
+        ).then(() => {
+            setOriginalTitle(newTitle);
+            setEditMode(false);
+        }).finally(onUpdate)
+    }
+
+    const cancelEdit = (e) => {
+        setEditMode(false);
+        setTitle(originalTitle);
+    }
+
+    const hotEdit = (e) => {
+        updateTitle(title);
+    }
+
     return (<li>
-        <input type={"checkbox"} onChange={onCheckboxChange}/>
-        {title}
+        <form onSubmit={updateItem}>
+        <input type={"checkbox"} onChange={onCheckboxChange} className={editMode ? "spacer" : ""}/>
+        <input
+            name="title"
+            type={"text"}
+            value={title}
+            onChange={(e) => { setTitle(e.target.value) } }
+            onFocus={activateEditMode}
+            onBlur={hotEdit}
+        />
+        </form>
     </li>);
 }
 
@@ -86,12 +139,13 @@ function ItemList({onCheck}) {
 
 
     useEffect(
-        reloadList,
+        () => { reloadList() },
         []
     )
 
     return (<ol className={loading ? 'loading' : ''}>
-        {items.map((item) => <ListItem key={item.id} id={item.id} title={item.title} onDelete={reloadList}/>)}
+        {items.map(
+            (item) => <ListItem key={item.id} id={item.id} title={item.title} onDelete={reloadList} onUpdate={reloadList}/>)}
         <ListAddNew onCreate={reloadList}/>
     </ol>);
 }
