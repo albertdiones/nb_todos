@@ -2,15 +2,21 @@ import logo from './logo.svg';
 import './App.css';
 import {Component} from "react";
 
-class ItemList extends Component {
-  render() {
-    return <ol>
-      <li><input type={"checkbox"}/>Buy Potatoes</li>
-      <li><input type={"checkbox"}/>Buy Tomatoes</li>
-      <li><input type={"checkbox"}/>Buy Cucumber</li>
-      <li><input type={"checkbox"}/>Buy Lettuce</li>
-    </ol>;
-  }
+function ListItem({title}) {
+  return (<li><input type={"checkbox"}/>{title}</li>);
+}
+
+function ItemList(props){
+  return (<ol>
+      <ListItem title={"Buy Potatoes"}/>
+      <ListItem title={"Buy Tomatoes"}/>
+      <ListItem title={"Buy Bleach"}/>
+      <ListItem title={"Buy Soap"}/>
+      <li>
+          <input type={"checkbox"} className={"spacer"} />
+          <input type={"text"} placeholder={"add new"}/>
+      </li>
+    </ol>);
 }
 
 function App() {

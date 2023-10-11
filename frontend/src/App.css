@@ -26,3 +26,12 @@ main ol li {
   border-left-style: none;
   border-right-style: none;
 }
+
+.spacer {
+  visibility: hidden;
+}
+
+main ol li input[type="text"] {
+  background-color:transparent;
+  border:none;
+}
