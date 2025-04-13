@@ -3,7 +3,7 @@ import './App.css';
 import {Component, useEffect, useState} from "react";
 
 
-const itemEndpoint = 'http://localhost:8000/api/items';
+const itemEndpoint = '/api/items';
 
 function ListItem({id, title: propTitle, onDelete, onUpdate}) {
     const [editMode, setEditMode] = useState(false);
